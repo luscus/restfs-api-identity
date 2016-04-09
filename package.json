@@ -1,0 +1,43 @@
+{
+  "name": "restfs-api-identity",
+  "license": "MIT",
+  "version": "0.0.1",
+  "homepage": "https://github.com/luscus/restfs-api-identity",
+  "author": "https://github.com/luscus/restfs-api-identity/graphs/contributors",
+  "description": "Provides an Identity API for RESTfs: create/authenticate/update/delete user (profile, roles, preferences)",
+  "keywords": [
+    "api",
+    "skeleton"
+  ],
+  "dependencies": {
+    "base64-url": "^1.2.2",
+    "clone": "^1.0.2",
+    "elasticsearch": "^10.1.3",
+    "email-regex": "^1.0.0",
+    "emailjs": "^1.0.4",
+    "merge": "^1.2.0",
+    "shortid": "^2.2.4",
+    "uuid": "^2.0.1"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "devmode": "^1.0.1",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-jsdoc-to-markdown": "^1.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-util": "^3.0.6",
+    "gulpfile.basics": "^0.0.3",
+    "mocha": "^2.3.4",
+    "pem": "^1.8.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/luscus/restfs-api-identity.git"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "bugs": "https://github.com/luscus/restfs-api-identity/issues",
+  "main": "./lib/restfs-api-identity.js"
+}
