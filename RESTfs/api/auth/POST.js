@@ -1,10 +1,11 @@
 'use strict';
 
-const jwt        = require('../../../lib/jwt');
-const user       = require('../../../lib/user');
-const role       = require('../../../lib/role');
-const challenge  = require('../../../lib/challenge');
-const identifier = require('../../../lib/identifier');
+const root       = __dirname.substring(0, __dirname.indexOf('/RESTfs'));
+const jwt        = require(root + '/lib/jwt');
+const user       = require(root + '/lib/user');
+const role       = require(root + '/lib/role');
+const challenge  = require(root + '/lib/challenge');
+const identifier = require(root + '/lib/identifier');
 
 exports.handler = function handler (context) {
 

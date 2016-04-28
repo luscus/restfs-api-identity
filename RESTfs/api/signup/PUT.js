@@ -1,6 +1,7 @@
 'use strict';
 
-const user    = require('../../../lib/user');
+const root       = __dirname.substring(0, __dirname.indexOf('/RESTfs'));
+const user       = require(root + '/lib/user');
 
 exports.handler = function handler (context) {
 

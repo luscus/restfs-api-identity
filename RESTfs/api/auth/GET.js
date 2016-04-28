@@ -1,9 +1,10 @@
 'use strict';
 
-const challenge  = require('../../../lib/challenge');
-const identifier = require('../../../lib/identifier');
-const role       = require('../../../lib/role');
-const smtp       = require('../../../lib/smtp');
+const root       = __dirname.substring(0, __dirname.indexOf('/RESTfs'));
+const challenge  = require(root + '/lib/challenge');
+const identifier = require(root + '/lib/identifier');
+const role       = require(root + '/lib/role');
+const smtp       = require(root + '/lib/smtp');
 
 exports.handler = function getAuthChallenge (context) {
 
@@ -18,12 +19,12 @@ exports.handler = function getAuthChallenge (context) {
     return;
   }
 
-  if (!context.data.body) {
+  if (!context.data.all) {
     return context.fail('Missing User email address', 400);
   }
 
-  if (!identifier.isEmail(context.data.body.identifier)) {
-    return context.fail('Malformed User email address: "' + context.data.body.identifier + '"', 400);
+  if (!identifier.isEmail(context.data.all.identifier)) {
+    return context.fail('Malformed User email address: "' + context.data.all.identifier + '"', 400);
   }
 
   challenge.set(context, function (error, challengeObject) {
@@ -31,7 +32,7 @@ exports.handler = function getAuthChallenge (context) {
       return context.fail(error);
     }
 
-    smtp.sendEmailChallenge(context.meta.domain, context.data.body.identifier, challengeObject.secret, function (error) {
+    smtp.sendEmailChallenge(context.meta.domain, context.data.all.identifier, challengeObject.secret, function (error) {
       if (error) {
         return context.fail(error);
       }

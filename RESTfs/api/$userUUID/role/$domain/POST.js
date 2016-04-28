@@ -1,8 +1,10 @@
 'use strict';
 
-const role       = require('../../../../../lib/role');
+const root       = __dirname.substring(0, __dirname.indexOf('/RESTfs'));
+const role       = require(root + '/lib/role');
 
 exports.handler = function handler (context) {
+
   var granterUUID = context.user && context.user.id || 'KEEPER';
   var userUUID    = context.data.url.userUUID;
   var domain      = context.data.url.domain;
