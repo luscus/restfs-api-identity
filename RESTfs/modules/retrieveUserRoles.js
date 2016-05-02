@@ -4,7 +4,7 @@ const role     = require('../../lib/role');
 
 module.exports = {
     chainCondition: function (routeElement) {
-        return !!routeElement.restricted;
+        return (typeof routeElement.restricted === 'boolean' ? routeElement.restricted : null);
     },
     chainPosition: 'pre',
     autoload: false,
