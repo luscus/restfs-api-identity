@@ -12,7 +12,7 @@ exports.handler = function getUserDomainRoles (context) {
     return context.fail('Not authenticated', 401);
   }
 
-  if (userUUID !== user.id  && !role.isAuthorised(userUUID, context)) {
+  if (userUUID !== context.user.id  && !role.isAuthorised(userUUID, context)) {
     return context.fail('Not authorised', 403);
   }
 

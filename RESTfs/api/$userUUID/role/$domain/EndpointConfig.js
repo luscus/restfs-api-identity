@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports = {
-    "plugable": true,
-    "wrappers": [
-        "POST"
+    plugable: true,
+    wrappers: [
+        'POST'
     ]
 };

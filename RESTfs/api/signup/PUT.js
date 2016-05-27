@@ -5,7 +5,7 @@ const user       = require(root + '/lib/user');
 
 exports.handler = function handler (context) {
 
-  if (context.user && !context.user.roles['MASTER']) {
+  if (context.user && !context.user.roles.MASTER) {
     return context.fail('Registration Failure User Authenticated', 403);
   }
 
