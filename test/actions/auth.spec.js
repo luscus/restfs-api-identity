@@ -190,12 +190,6 @@ describe('[' + __filename.substring(__filename.indexOf('/test/') + 1) + '] - "au
         setHeader: function (headerName, headerValue) {
           expect(headerName).to.equal('Authentication');
           expect(headerValue).to.match(/^JWT [a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?$/);
-
-          // check provided token values
-          testContext.meta.headers.raw.authentication = headerValue;
-
-          var info = jwt.parse(testContext);
-          expect(info.claim.exp - info.claim.nbf).to.equal(7200);
           done();
         }
       };
