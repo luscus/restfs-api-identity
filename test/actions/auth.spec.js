@@ -7,6 +7,7 @@ const clone       = require('clone');
 
 const root        = __dirname.substring(0, __dirname.indexOf('/test/'));
 const elastic     = require(root + '/lib/elastic-client')().mock();     // force use of mocked data
+const jwt         = require(root + '/lib/jwt');                 // force use of mocked smtp server
 const smtp        = require(root + '/lib/smtp').mock();                 // force use of mocked smtp server
 const signupMeta  = require(root + '/RESTfs/api/auth/EndpointConfig');
 const authGet     = require(root + '/RESTfs/api/auth/GET');
@@ -14,6 +15,7 @@ const authPost    = require(root + '/RESTfs/api/auth/POST');
 const reqContext  = require('../testContext');
 
 var challengeID   = null;
+var testContext   = null;
 
 describe('[' + __filename.substring(__filename.indexOf('/test/') + 1) + '] - "auth" action', function() {
 
@@ -63,6 +65,7 @@ describe('[' + __filename.substring(__filename.indexOf('/test/') + 1) + '] - "au
 
       authGet.handler(testContext);
     });
+
   });
 
   describe('POST', function() {
@@ -126,7 +129,7 @@ describe('[' + __filename.substring(__filename.indexOf('/test/') + 1) + '] - "au
     });
 
     it('should return statusCode 200 and user roles if challenge was successful', function () {
-      var testContext = clone(reqContext);
+      testContext = clone(reqContext);
       delete testContext.user;
 
       elastic.get(
@@ -146,6 +149,58 @@ describe('[' + __filename.substring(__filename.indexOf('/test/') + 1) + '] - "au
         }
       );
 
+    });
+
+  });
+
+  describe('POST post-processing', function() {
+    it('should set Authentication header if challenge was successful', function (done) {
+      var response = {
+        statusCode: 200,
+        setHeader: function (headerName, headerValue) {
+          expect(headerName).to.equal('Authentication');
+          expect(headerValue).to.match(/^JWT [a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?$/);
+
+          // check provided token values
+          testContext.meta.headers.raw.authentication = headerValue;
+
+          var info = jwt.parse(testContext);
+
+          expect(info.header.jku).to.equal(testContext.meta.domain);
+          expect(info.claim.iss).to.equal(testContext.meta.domain);
+
+          expect(info.claim.sub).to.equal(testContext.user.id);
+          expect(info.claim.sub).to.equal(info.claim.user.id);
+
+          expect(info.claim.nbf).to.equal(info.claim.iat);
+          expect(info.claim.exp - info.claim.nbf).to.equal(3600);
+
+          done();
+        }
+      };
+
+      authPost.chain.post[0](response, testContext);
+    });
+  });
+
+  describe('GET post-processing', function() {
+    it('should extend lifetime of Authentication token if user was already authenticated', function (done) {
+      var response    = {
+        statusCode: 200,
+        setHeader: function (headerName, headerValue) {
+          expect(headerName).to.equal('Authentication');
+          expect(headerValue).to.match(/^JWT [a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?$/);
+
+          // check provided token values
+          testContext.meta.headers.raw.authentication = headerValue;
+
+          var info = jwt.parse(testContext);
+          expect(info.claim.exp - info.claim.nbf).to.equal(7200);
+          done();
+        }
+      };
+
+      authGet.chain.post[0](response, testContext);
     });
   });
 
