@@ -20,12 +20,16 @@ exports.handler = function handler (context) {
     return;
   }
 
+  if (!context.data.body.identifier) {
+    return context.fail('Missing Identifier', 400);
+  }
+
   if (!identifier.isEmail(context.data.body.identifier)) {
-    return context.fail('Missing/Malformed Email', 400);
+    return context.fail('Malformed Identifier', 400);
   }
 
   if (!context.data.body.secret) {
-    return context.fail('Challenge Secret Missing', 400);
+    return context.fail('Missing Challenge Secret', 400);
   }
 
   challenge.check(context, function (error, challengeMastered) {

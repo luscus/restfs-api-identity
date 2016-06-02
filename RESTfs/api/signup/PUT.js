@@ -5,8 +5,12 @@ const user       = require(root + '/lib/user');
 
 exports.handler = function handler (context) {
 
-  if (context.user && !context.user.roles.MASTER) {
+  if (context.user && !(context.user.roles && context.user.roles.MASTER)) {
     return context.fail('Registration Failure User Authenticated', 403);
+  }
+
+  if (!context.data || !context.data.body || !context.data.body.email) {
+    return context.fail('No email address specified', 400);
   }
 
   user.getUUID(context.data.body.email, function (error, userUUID) {
@@ -32,6 +36,7 @@ exports.handler = function handler (context) {
 
 exports.STATUS_CODES = {
   201: 'Registration Success',
+  400: 'Registration Failure Missing Data',
   403: 'Registration Failure User Authenticated',
   409: 'Registration Failure User Exists'
 };
