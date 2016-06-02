@@ -5,6 +5,7 @@ const challenge  = require(root + '/lib/challenge');
 const identifier = require(root + '/lib/identifier');
 const role       = require(root + '/lib/role');
 const smtp       = require(root + '/lib/smtp');
+const jwt        = require(root + '/lib/jwt');
 
 exports.handler = function getAuthChallenge (context) {
 
@@ -19,7 +20,7 @@ exports.handler = function getAuthChallenge (context) {
     return;
   }
 
-  if (!context.data.all) {
+  if (!context.data.all.identifier) {
     return context.fail('Missing User email address', 400);
   }
 
@@ -40,6 +41,18 @@ exports.handler = function getAuthChallenge (context) {
       context.resolve(challengeObject.id, 202);
     });
   });
+};
+
+exports.chain      = {
+  post: [
+    function refreshAuthenticationHeader(response, context) {
+      if (context.user && response.statusCode === 200) {
+        var value = jwt.expendLifetime(context);
+
+        response.setHeader('Authentication', 'JWT ' + value);
+      }
+    }
+  ]
 };
 
 exports.STATUS_CODES = {
