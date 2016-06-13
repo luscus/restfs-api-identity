@@ -11,7 +11,7 @@ module.exports = {
       if (context.meta.headers.raw.authentication) {
           const tokenInfo = jwt.parse(context);
           const timestamp = Math.floor(Date.now() / 1000);
-          const lifespan  = context.config.token && context.config.token.lifespan || constants.token.lifespan;
+          const lifespan  = context.config && context.config.token && context.config.token.lifespan || constants.token.lifespan;
 
 
           if (!tokenInfo.claim.iat) {

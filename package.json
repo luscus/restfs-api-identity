@@ -1,7 +1,7 @@
 {
   "name": "restfs-api-identity",
   "license": "MIT",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "homepage": "https://github.com/luscus/restfs-api-identity",
   "author": "https://github.com/luscus/restfs-api-identity/graphs/contributors",
   "description": "Provides an Identity API for RESTfs: create/authenticate/update/delete user (profile, roles, preferences)",
