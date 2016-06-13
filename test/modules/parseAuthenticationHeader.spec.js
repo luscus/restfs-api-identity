@@ -27,33 +27,43 @@ describe('[' + __filename.substring(__filename.indexOf('/test/') + 1) + '] - par
         };
     });
 
-    it('should do nothing if no JWT token exists', function() {
-        apiModule.handler({}, testContext);
-        expect(testContext.user).to.equal(undefined);
+    it('should be a "pre" chain module', function() {
+        expect(apiModule.chainPosition).to.equal('pre');
     });
 
-    it('should ignore pending JWT tokens', function() {
-        testContext.meta.headers.raw.authentication = 'JWT ' + jwt.tokenize(reqContext, secret, 10000, testTimestamp);
-
-        apiModule.handler({}, testContext);
-
-        expect(testContext.user).to.equal(undefined);
+    it('should load automatically', function() {
+        expect(apiModule.autoload).to.equal(true);
     });
 
-    it('should ignore expired JWT tokens', function() {
-        testContext.meta.headers.raw.authentication = 'JWT ' + jwt.tokenize(reqContext, secret, testTimestamp - 10000);
+    describe('handler', function() {
+        it('should do nothing if no JWT token exists', function () {
+            apiModule.handler({}, testContext);
+            expect(testContext.user).to.equal(undefined);
+        });
 
-        apiModule.handler({}, testContext);
+        it('should ignore pending JWT tokens', function () {
+            testContext.meta.headers.raw.authentication = 'JWT ' + jwt.tokenize(reqContext, secret, 10000, testTimestamp);
 
-        expect(testContext.user).to.equal(undefined);
-    });
+            apiModule.handler({}, testContext);
 
-    it('should retrieve user from JWT token', function() {
-        testContext.meta.headers.raw.authentication = 'JWT ' + jwt.tokenize(reqContext, secret, testTimestamp - 100);
+            expect(testContext.user).to.equal(undefined);
+        });
 
-        apiModule.handler({}, testContext);
+        it('should ignore expired JWT tokens', function () {
+            testContext.meta.headers.raw.authentication = 'JWT ' + jwt.tokenize(reqContext, secret, testTimestamp - 10000);
 
-        expect(testContext.user).to.deep.equal(reqContext.user);
+            apiModule.handler({}, testContext);
+
+            expect(testContext.user).to.equal(undefined);
+        });
+
+        it('should retrieve user from JWT token', function () {
+            testContext.meta.headers.raw.authentication = 'JWT ' + jwt.tokenize(reqContext, secret, testTimestamp - 100);
+
+            apiModule.handler({}, testContext);
+
+            expect(testContext.user).to.deep.equal(reqContext.user);
+        });
     });
 
 });

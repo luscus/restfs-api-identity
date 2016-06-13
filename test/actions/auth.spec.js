@@ -141,7 +141,7 @@ describe('[' + __filename.substring(__filename.indexOf('/test/') + 1) + '] - "au
 
           testContext.resolve = testContext.fail = function (data, statusCode) {
             expect(data).to.be.a('object')
-              .and.to.deep.equal({});
+              .and.to.deep.equal({ TESTER: 'CONFEDERATION:IDENTITY:ROLE:test.io:TESTER' });
             expect(statusCode).to.equal(200);
           };
 

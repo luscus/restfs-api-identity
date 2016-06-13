@@ -9,11 +9,11 @@ exports.handler = function getUserDomainRoles (context) {
   var domain   = context.data.url.domain;
 
   if (!context.user) {
-    return context.fail('Not authenticated', 401);
+    return context.fail('Not Authenticated', 401);
   }
 
   if (userUUID !== context.user.id  && !role.isAuthorised(userUUID, context)) {
-    return context.fail('Not authorised', 403);
+    return context.fail('Not Authorised', 403);
   }
 
   role.getRoles(userUUID, domain, function (error, roles) {
@@ -27,5 +27,6 @@ exports.handler = function getUserDomainRoles (context) {
 
 exports.STATUS_CODES = {
   200: 'User Role List',
-  401: 'User Not Authenticated'
+  401: 'User Not Authenticated',
+  403: 'User Not Authorised'
 };

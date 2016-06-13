@@ -3,7 +3,10 @@
 module.exports = {
     config: {},
     user: {
-        id: 'test.user'
+        id: '6d64d5ec-5f51-4323-93d4-39605c0b17fc',
+        roles: {
+            TESTER: true
+        }
     },
     meta: {
         domain: 'test.io',
@@ -17,6 +20,7 @@ module.exports = {
     },
     data: {
         all: {},
+        url: {},
         body: {},
         query: {}
     },
