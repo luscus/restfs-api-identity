@@ -68,7 +68,8 @@ exports.chain      = {
       if (response.statusCode === 200) {
         var value = jwt.tokenize(context);
 
-        response.setHeader('Authentication', 'JWT ' + value);
+        response.setHeader('Authentication', 'JWT ' + 'JWT ' + value);
+        response.write(value);
       }
     }
   ]

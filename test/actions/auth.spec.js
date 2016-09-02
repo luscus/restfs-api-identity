@@ -157,6 +157,9 @@ describe('[' + __filename.substring(__filename.indexOf('/test/') + 1) + '] - "au
     it('should set Authentication header if challenge was successful', function (done) {
       var response = {
         statusCode: 200,
+        write: function (bodyValue) {
+          expect(bodyValue).to.match(/^[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?$/);
+        },
         setHeader: function (headerName, headerValue) {
           expect(headerName).to.equal('Authentication');
           expect(headerValue).to.match(/^JWT [a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?$/);
